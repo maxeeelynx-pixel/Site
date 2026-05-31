@@ -1,308 +1,87 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <title>MeowLens — Очки-переводчик с кошачьего</title>
-    <style>
-        body {
-            font-family:  sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #0f172a; 
-            color: #f8fafc;
-        }
-
-        header { 
-            background-color: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(10px);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            padding: 15px 0;
-            text-align: center;
-        }
-
-        header a {
-            color: #38bdf8;
-            text-decoration: none;
-            margin: 0 15px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        header a:hover {
-            color: #f43f5e;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* 1. ГЛАВНЫЙ ЭКРАН */
-        .hero {
-            padding: 150px 0 80px 0;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            gap: 40px;
-        }
-
-        .hero-text {
-            flex: 1;
-            min-width: 300px;
-        }
-
-        .hero-text h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            color: #38bdf8;
-            text-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
-        }
-
-        .hero-text p {
-            font-size: 1.2rem;
-            line-height: 1.6;
-            color: #cbd5e1;
-            margin-bottom: 30px;
-        }
-
-        .hero-image {
-            flex: 1;
-            min-width: 300px;
-            text-align: center;
-        }
-
-        /* Заглушка для вашей будущей нейросетевой картинки */
-        .hero-image img {
-            max-width: 100%;
-            border-radius: 20px;
-            box-shadow: 0 0 30px rgba(244, 63, 94, 0.4);
-            border: 2px solid #f43f5e;
-        }
-
-        .btn {
-            display: inline-block;
-            background: linear-gradient(135deg, #f43f5e, #e11d48);
-            color: white;
-            padding: 15px 35px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1rem;
-            box-shadow: 0 4px 15px rgba(244, 63, 94, 0.4);
-            transition: 0.3s transform, 0.3s box-shadow;
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(244, 63, 94, 0.6);
-        }
-
-        /* 2. БЛОК "КАК ЭТО РАБОТАЕТ" */
-        .how-it-works {
-            padding: 80px 0;
-            background-color: #1e293b;
-            text-align: center;
-        }
-
-        .how-it-works h2 {
-            font-size: 2.5rem;
-            margin-bottom: 50px;
-            color: #f43f5e;
-        }
-
-        .steps {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 20px;
-        }
-
-        .step-card {
-            flex: 1;
-            min-width: 250px;
-            background-color: #0f172a;
-            padding: 30px;
-            border-radius: 15px;
-            border: 1px solid #334155;
-            transition: 0.3s;
-        }
-
-        .step-card:hover {
-            border-color: #38bdf8;
-            transform: translateY(-5px);
-        }
-
-        .step-number {
-            font-size: 2.5rem;
-            color: #38bdf8;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .step-card h3 {
-            margin-bottom: 15px;
-        }
-
-        .step-card p {
-            color: #94a3b8;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-
-        /* 3. БЛОК "ФОРМА ЗАКАЗА" */
-        .order-section {
-            padding: 80px 0;
-            text-align: center;
-        }
-
-        .order-section h2 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-
-        .order-form {
-            max-width: 500px;
-            margin: 40px auto 0 auto;
-            background-color: #1e293b;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            border: 1px solid #334155;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #94a3b8;
-        }
-
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #475569;
-            background-color: #0f172a;
-            color: white;
-            font-size: 1rem;
-            box-sizing: border-box;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #38bdf8;
-        }
-
-        .submit-btn {
-            width: 100%;
-            background: linear-gradient(135deg, #38bdf8, #0284c7);
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
-            transition: 0.3s;
-        }
-
-        .submit-btn:hover {
-            background: linear-gradient(135deg, #0284c7, #0369a1);
-        }
-
-        footer {
-            text-align: center;
-            padding: 30px;
-            color: #64748b;
-            font-size: 0.9rem;
-            border-top: 1px solid #1e293b;
-        }
-    </style>
+    <title>Моя коллекция</title>
+    <meta charset="UTF-8">
 </head>
 <body>
 
-    <!-- Навигация -->
     <header>
-        <a href="#hero">Главная</a>
-        <a href="#how">Как это работает</a>
-        <a href="#order">Заказать</a>
+        <h1>Моя коллекция наклеек</h1>
+        <p>Здесь я храню свои самые редкие сокровища!</p>
     </header>
-    <section id="hero" class="container hero">
-        <div class="hero-text">
-            <h1>MeowLens 3000</h1>
-            <p>Узнайте, о чем молчит ваш кот! Первые в мире умные очки со встроенным ИИ-переводчиком кошачьих мыслей, мяуканья и движений хвоста в реальном времени.</p>
-            <a href="#order" class="btn">Понять своего кота</a>
-        </div>
-        <div class="hero-image">
-            <!-- Когда загрузите свою картинку на GitHub, замените ссылку ниже на её имя, например: src="cat.jpg" -->
-            <img src="https://unsplash.com" alt="Кот в ожидании технологий">
-        </div>
-    </section>
 
-    <!-- Блок 2: Как это работает -->
-    <section id="how" class="how-it-works">
-        <div class="container">
-            <h2>Как это работает?</h2>
-            <div class="steps">
-                <div class="step-card">
-                    <div class="step-number">01</div>
-                    <h3>Наденьте очки</h3>
-                    <p>MeowLens автоматически синхронизируются с вашим взглядом и наводят фокус на пушистого собеседника.</p>
-                </div>
-                <div class="step-card">
-                    <div class="step-number">02</div>
-                    <h3>Кот мяукает</h3>
-                    <p>Высокочувствительный микрофон считывает интонацию и частоту звука, а камера сканирует мимику и усы.</p>
-                </div>
-                <div class="step-card">
-                    <div class="step-number">03</div>
-                    <h3>Читайте субтитры</h3>
-                    <p>Нейросеть мгновенно переводит кошачьи требования и выводит понятный текст прямо на стекла очков.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+    <main>
+        <section class="card">
+            <img src="https://via.placeholder.com/200x150&quot; alt="Наклейка 1">
+            <h2>Редкая наклейка</h2>
+            <p>Эту я нашел в старой пачке чипсов.</p>
+        </section>
 
-    <!-- Блок 3: Форма заказа -->
-    <section id="order" class="container order-section">
-        <h2>Оформить предзаказ</h2>
-        <p style="color: #94a3b8;">Оставьте заявку, и наш менеджер (человек, не кот) свяжется с вами.</p>
-        
-        <form class="order-form" onsubmit="alert('Ура! Заявка принята. Скоро вы заговорите по-кошачьи!'); return false;">
-            <div class="form-group">
-                <label for="name">Ваше имя</label>
-                <input type="text" id="name" placeholder="Иван" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Ваш Email</label>
-                <input type="email" id="email" placeholder="example@mail.ru" required>
-            </div>
-            <div class="form-group">
-                <label for="cat-breed">Порода вашего кота</label>
-                <select id="cat-breed">
-                    <option value="1">Обычный любимый (дворянин)</option>
-                    <option value="2">Британский / Шотландский (ворчливый)</option>
-                    <option value="3">Сфинкс (космический)</option>
-                    <option value="4">Мейн-кун (очень большой)</option>
-                    <option value="5">У меня пока нет кота</option>
-                </select>
-            </div>
-            <button type="submit" class="submit-btn">Хочу MeowLens</button>
-        </form>
-    </section>
+        <section class="card">
+            <img alt="Наклейка 2" id="019e7bd3-dcf3-7cc5-b432-c994fe87242d">
+            <h2>Наклейка с котиком</h2>
+            <p>Самая милая в моей коллекции.</p>
+        </section>
+
+        <section class="card">
+            <img alt="Наклейка 3" id="019e7bd3-e0dd-7b7b-8243-11b98d5df160">
+            <h2>Голографическая наклейка</h2>
+            <p>Блестит на солнце!</p>
+        </section>
+    </main>
 
     <footer>
-        <p>&copy; 2026 MeowLens Technologies. Все права защищены. Ни один кот при разработке не пострадал.</p>
+        <p>© 2024 Моя коллекция. Все права защищены.</p>
     </footer>
 
 </body>
 </html>
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    line-height: 1.6;
+}
+
+header {
+    background-color: #6a82fb;
+    color: white;
+    text-align: center;
+    padding: 40px 20px;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 40px 20px;
+}
+
+.card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 250px;
+    text-align: center;
+    padding: 15px;
+}
+
+.card img {
+    border-radius: 8px;
+}
+
+footer {
+    background-color: #6a82fb;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
